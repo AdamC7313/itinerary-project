@@ -1,7 +1,7 @@
 'use client';
 import { createSlice } from '@reduxjs/toolkit';
 
-const tripsSlice = createSlice({
+export const tripsSlice = createSlice({
   name: 'trips',
   initialState: {
     trips: 
@@ -38,7 +38,9 @@ const tripsSlice = createSlice({
       ],
   },
   reducers: {
+    addAttraction: (state, action) => {
+      state.trips[0].attraction = action.payload;
   }
-});
+}});
 
 export default tripsSlice.reducer;

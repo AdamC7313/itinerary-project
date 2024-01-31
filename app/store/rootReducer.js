@@ -1,4 +1,4 @@
-import tripsReducer from '../store/slices/tripsSlice';
+import tripsReducer from './slices/trips';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
