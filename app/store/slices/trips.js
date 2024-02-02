@@ -15,6 +15,8 @@ export const tripsSlice = createSlice({
         hotel: {
           name: "Marriott",
           address: "1000 Boylston St, Boston, MA 02116",
+          lat: 42.346741,
+          lon: -71.078049,
           rating: 4,
           link: "https://www.marriott.com/hotels/travel/bosco-boston-marriott-copley-place/",
         },
