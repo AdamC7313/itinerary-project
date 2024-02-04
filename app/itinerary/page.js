@@ -1,8 +1,20 @@
 'use client'
 import { useSelector } from "react-redux";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const findLengthOfTrip = () => {
 
+const findLengthOfTrip = (startDate, endDate) => {
+  const dates = [];
+  let startTripDate = new Date(startDate);
+  let endTripDate = new Date(endDate);
+
+  while (startTripDate <= endTripDate) {
+    dates.push(new Date(startTripDate).toISOString().split('T')[0]);
+    startTripDate.setDate(startTripDate.getDate() + 1);
+  }
+
+  return dates;
 }
 
 const getSpelledOutDate = (dateString) => {
@@ -12,24 +24,48 @@ const getSpelledOutDate = (dateString) => {
   return date.toLocaleDateString('en-US', options);
 }
 
+const RenderMeals = () => {
+  const meals = useSelector((state) => state.trips.trips[0].meals);
+  // console.log(meals);
+
+  return meals.map((meal) => (
+    <div key={meal.id}>
+      <table className="row">
+        <tbody>
+          <tr className="row">
+            <td className="col-md-6">{meal.name}</td>
+            <td className="col-md-6">{meal.startTime} - {meal.endTime}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  ));
+};
+
 
 const RenderItinerary = () => {
   const trips = useSelector((state) => state.trips.trips);
-  console.log(trips);
+  // console.log(trips);
 
-  return trips.map((itinerary) => (
+  return trips.map((itinerary) => {
+    const dateRange = findLengthOfTrip(itinerary.startDate, itinerary.endDate)
+    console.log(dateRange);
+
+    return (
     <div key={itinerary.id}>
       <h2>Itinerary for {itinerary.city}, {itinerary.state}</h2>
       <p>Hotel: {itinerary.hotel.name} at {itinerary.hotel.address}</p>
       <br/>
-      <table key={itinerary.id} className="row">
+      <table className="row">
         <tbody>
           <tr className="row">
-            <td className="d-flex justify-content-between">
-              <div>{getSpelledOutDate(itinerary.startDate)}</div>
+            <td className="col-md-8">
+              <div><strong>{getSpelledOutDate(itinerary.startDate)}</strong></div>
               <div>
-                <button>Add Meal</button>
-                <button>Add Attraction</button>
+                <Link href={`/app/itinerary/[id]/addMeal`} as={`/app/itinerary/${itinerary.id}/addMeal`}>
+                  <button className="btn btn-dark">Add Meal</button></Link>
+                <Link href={`/app/itinerary/[id]/addAttraction`} as={`/app/itinerary/${itinerary.id}/addAttraction`}><button className="btn btn-dark">Add Attraction</button></Link>
+                <hr/>
               </div>
             </td>
           </tr>
@@ -38,19 +74,12 @@ const RenderItinerary = () => {
             <td className="col-md-6">{itinerary.attraction.startTime} - {itinerary.attraction.endTime}</td>
           </tr>
           <tr className="row">
-            <td className="col-md-6">
-              {itinerary.meals.map((meal) => (
-                <div key={meal.id} className="row">
-                  <span className="col-md-6">{meal.name}</span>
-                  <span className="col-md-6">{meal.startTime} - {meal.endTime}</span>
-                </div>
-              ))}
-            </td>
+            <td><RenderMeals/></td>
           </tr>
-        </tbody>
+       </tbody>
       </table>
     </div>
-  ));
+  )});
 };
 
 export default RenderItinerary;
