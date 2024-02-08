@@ -43,22 +43,25 @@ export const tripsSlice = createSlice({
             date: "2020-06-01",
           },
         ],
-        attraction: {
+        attractions: [
+          {
           id: 1234,
           name: "Fenway Park",
           startTime: "10:00",
           endTime: "12:00",
+          date: "2020-06-01",
           distance: 2,
           rating: 5,
           address: "4 Yawkey Way, Boston, MA 02215",
           link: "https://www.mlb.com/redsox/ballpark",
-        },
+          },
+        ],
       },
     ],
   },
   reducers: {
     addAttraction: (state, action) => {
-      state.trips[0].attraction = action.payload;
+      state.trips[0].attractions = action.payload;
     },
   },
 });
